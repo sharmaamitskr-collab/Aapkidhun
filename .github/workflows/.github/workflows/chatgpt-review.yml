@@ -1,1 +1,33 @@
-GitHub → Aapkidhun repo → "Add file" → "Create new file"
+name: ChatGPT PWA Review
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: ChatGPT Review (GPT-4o)
+      uses: github/github-models@v1
+      with:
+        model: 'gpt-4o'
+        prompt: |
+          Review AapkiDhun PWA:
+          • PWA manifest validation
+          • Service Worker check
+          • Mobile responsiveness
+          • Performance optimization
+          • Security & accessibility
+          Write detailed report.
+    
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+
